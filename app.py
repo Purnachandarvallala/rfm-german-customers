@@ -89,19 +89,10 @@ def load_and_process_data():
     subsequent page interactions use cached results.
     """
     # ── Load ──────────────────────────────────────────
-    @st.cache_data
-def load_raw_data():
-    url = (
-        "https://archive.ics.uci.edu/ml/"
-        "machine-learning-databases/00352/"
-        "Online%20Retail.xlsx"
+    df = pd.read_csv(
+        'data/online_retail_II.csv',
+        encoding='latin-1'
     )
-    df = pd.read_excel(url)
-    df = df.rename(columns={
-        'Customer ID': 'CustomerID' if 'Customer ID'
-        in df.columns else 'CustomerID'
-    })
-    return df
 
     # ── Clean ─────────────────────────────────────────
     df = df.dropna(subset=['Customer ID'])
@@ -186,15 +177,18 @@ with st.spinner('Loading and processing data...'):
 
 # ── German customers ──────────────────────────────────
 german_ids = df_clean[
-    df_clean['Country'] == '"🇩🇪 Germany'
+    df_clean['Country'] == 'Germany'
 ]['CustomerID'].unique()
 rfm_germany = rfm[rfm['CustomerID'].isin(german_ids)].copy()
 
 # ══════════════════════════════════════════════════════
 # SIDEBAR
 # ══════════════════════════════════════════════════════
-
-st.sidebar.markdown("&nbsp;")
+st.sidebar.image(
+    "https://upload.wikimedia.org/wikipedia/commons/"
+    "thumb/b/b9/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png",
+    width=80
+)
 st.sidebar.title("📊 RFM Dashboard")
 st.sidebar.markdown("**E-Commerce Segmentation**")
 st.sidebar.markdown("---")
@@ -203,7 +197,7 @@ st.sidebar.markdown("---")
 page = st.sidebar.radio(
     "📌 Navigate",
     ["🌍 Global Overview",
-     "🏆 German Deep Dive",
+     "🇩🇪 German Deep Dive",
      "💎 CLV Analysis",
      "📅 Cohort Retention"]
 )
@@ -244,7 +238,7 @@ st.sidebar.markdown(
 st.sidebar.markdown("---")
 st.sidebar.markdown(
     "Built by **Purnachandar Vallala**  \n"
-    "MSc Data Science Student · Germany"
+    ""MSc Data Science Student · Germany""
 )
 
 # ══════════════════════════════════════════════════════
@@ -405,7 +399,7 @@ if page == "🌍 Global Overview":
             x='Country', y='Revenue',
             color='Country',
             color_discrete_sequence=[
-                '#E07A5F' if c == '"🇩🇪 Germany'
+                '#E07A5F' if c == 'Germany'
                 else '#667eea'
                 for c in top_countries['Country']
             ],
@@ -450,11 +444,11 @@ if page == "🌍 Global Overview":
 # ══════════════════════════════════════════════════════
 # PAGE 2: GERMAN DEEP DIVE
 # ══════════════════════════════════════════════════════
-elif page == "🏆 German Deep Dive":
+elif page == "🇩🇪 German Deep Dive":
 
     st.markdown("""
     <div class="main-header">
-        <h1>German Market Deep Dive</h1>
+        <h1>🇩🇪 German Market Deep Dive</h1>
         <p>107 German Customers · 3.6x Higher CLV ·
            Statistical Significance Proven (p&lt;0.05)</p>
     </div>
@@ -478,7 +472,7 @@ elif page == "🏆 German Deep Dive":
     st.markdown("---")
 
     # ── Comparison Chart ──────────────────────────────
-    st.subheader("🔍 "🇩🇪 Germany vs Global — Segment Distribution")
+    st.subheader("🔍 Germany vs Global — Segment Distribution")
 
     global_s = (rfm['Segment'].value_counts() /
                 len(rfm) * 100).round(1).reset_index()
@@ -488,7 +482,7 @@ elif page == "🏆 German Deep Dive":
     german_s = (rfm_germany['Segment'].value_counts() /
                 len(rfm_germany) * 100).round(1).reset_index()
     german_s.columns = ['Segment', 'Percentage']
-    german_s['Market'] = '"🇩🇪 Germany'
+    german_s['Market'] = '🇩🇪 Germany'
 
     combined = pd.concat([global_s, german_s])
 
@@ -497,7 +491,7 @@ elif page == "🏆 German Deep Dive":
         color='Market', barmode='group',
         color_discrete_map={
             '🌍 Global':   '#6C7086',
-            '"🇩🇪 Germany': '#2EC4B6'
+            '🇩🇪 Germany': '#2EC4B6'
         },
         text='Percentage',
         labels={'Percentage': '% of Customers'}
@@ -542,7 +536,7 @@ elif page == "🏆 German Deep Dive":
             f"{rfm['CLV'].median():.1f}",
             f"{(rfm['Segment']=='Champions').mean()*100:.1f}%"
         ],
-        '"🇩🇪 Germany': [
+        '🇩🇪 Germany': [
             f"{rfm_germany['Recency'].mean():.1f}",
             f"{rfm_germany['Frequency'].mean():.1f}",
             f"£{rfm_germany['Monetary'].mean():,.0f}",
@@ -595,7 +589,7 @@ elif page == "💎 CLV Analysis":
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Avg CLV (Global)",
               f"{rfm['CLV'].mean():,.0f}")
-    k2.metric("Avg CLV ("🇩🇪 Germany)",
+    k2.metric("Avg CLV (Germany)",
               f"{rfm_germany['CLV'].mean():,.0f}",
               "Higher than global")
     k3.metric("Platinum Customers",
@@ -634,7 +628,7 @@ elif page == "💎 CLV Analysis":
         st.plotly_chart(fig6, use_container_width=True)
 
     with col2:
-        st.subheader("German CLV Tier Distribution")
+        st.subheader("🇩🇪 German CLV Tier Distribution")
         de_clv = rfm_germany['CLV_Tier'] \
             .value_counts().reset_index()
         de_clv.columns = ['Tier', 'Count']
