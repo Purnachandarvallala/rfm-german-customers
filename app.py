@@ -184,13 +184,37 @@ rfm_germany = rfm[rfm['CustomerID'].isin(german_ids)].copy()
 # ══════════════════════════════════════════════════════
 # SIDEBAR
 # ══════════════════════════════════════════════════════
-st.sidebar.image(
-    "https://upload.wikimedia.org/wikipedia/commons/"
-    "thumb/b/b9/Flag_of_Germany.svg/320px-Flag_of_Germany.svg.png",
-    width=80
-)
-st.sidebar.title("📊 RFM Dashboard")
-st.sidebar.markdown("**E-Commerce Segmentation**")
+st.sidebar.markdown("""
+<div style="
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+">
+    <div style="font-size:22px; font-weight:800;
+                margin-bottom:12px">
+        📊 RFM Dashboard
+    </div>
+    <div style="font-size:12px; line-height:2;
+                color:rgba(255,255,255,0.9)">
+        🌍 <b>38</b> Countries Analysed<br>
+        👥 <b>5,878</b> Customers Segmented<br>
+        💰 <b>£17.7M</b> Revenue Analysed<br>
+        📅 Dataset: <b>2009 – 2011</b><br>
+        🏆 <b>107</b> German Customers<br>
+        🤖 RFM · CLV · K-Means · Cohort
+    </div>
+    <hr style="border-color:rgba(255,255,255,0.3);
+               margin:12px 0">
+    <div style="font-size:11px;
+                color:rgba(255,255,255,0.8)">
+        Built by <b>Purnachandar Vallala</b><br>
+        MSc Data Science · Germany
+    </div>
+</div>
+""", unsafe_allow_html=True)
 st.sidebar.markdown("---")
 
 # Page navigation
@@ -238,7 +262,7 @@ st.sidebar.markdown(
 st.sidebar.markdown("---")
 st.sidebar.markdown(
     "Built by **Purnachandar Vallala**  \n"
-    ""MSc Data Science Student · Germany""
+    "MSc Data Science Student · Germany"
 )
 
 # ══════════════════════════════════════════════════════
