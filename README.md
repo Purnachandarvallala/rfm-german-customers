@@ -173,7 +173,6 @@ reference date, placed 79 orders, spent £39,963, and has a CLV score of
 
 | Metric | Global | Germany | Difference |
 |--------|--------|---------|-----------|
-| Customers | 5,878 | 107 | — |
 | Avg Recency (days) | 201.3 | 133.1 | −68.2 days |
 | Avg Frequency | 6.3 | 7.4 | +1.1 orders |
 | Avg Monetary | £3,018 | £4,039 | +£1,020 |
